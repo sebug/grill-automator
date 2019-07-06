@@ -26,15 +26,25 @@ def pixels_to_tuple_array(w, h, pixels):
         tuple_array.append(line_array)
     return tuple_array
 
+def is_white_pixel(pixel):
+    return pixel[0] == 255 and pixel[1] == 255 and pixel[2] == 255
+
+# but skip first black pixel on every line
+def is_white_line(line):
+    for pixel in line[5:-5]:
+        if not is_white_pixel(pixel):
+            return False
+    return True
 
 def get_grid(w, h, pixels):
     print (w, h)
 
 if __name__ == '__main__':
-    get_current_screenshot()
+    # get_current_screenshot()
     ss = read_screenshot()
     pixel_array = pixels_to_tuple_array(ss[0], ss[1], ss[2])
-    pix = pixel_array[340][312]
-    print pix[2]
+    for line in pixel_array:
+        print is_white_line(line)
+
 
 
