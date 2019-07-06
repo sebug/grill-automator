@@ -36,15 +36,46 @@ def is_white_line(line):
             return False
     return True
 
+def line_sum(line):
+    result = 0
+    for pixel in line:
+        result += sum(pixel)
+    return result
+
 def get_grid(w, h, pixels):
     print (w, h)
+
+def get_last_white_line(pixel_array):
+    y = -1
+    last_line = -1
+    previous_line = pixel_array[0]
+    for line in pixel_array:
+        y += 1
+        if is_white_line(line) and is_white_line(previous_line):
+            last_line = y
+        previous_line = line
+    return last_line
+
+# idea: find an intersection between four tiles and go from there
+
 
 if __name__ == '__main__':
     # get_current_screenshot()
     ss = read_screenshot()
     pixel_array = pixels_to_tuple_array(ss[0], ss[1], ss[2])
-    for line in pixel_array:
-        print is_white_line(line)
+    last_line = get_last_white_line(pixel_array)
+    min_sum = line_sum(pixel_array[last_line])
+    min_y = last_line
+    y = last_line
+    previous_sum = min_sum
+    for line in pixel_array[last_line:-(last_line + 10)]:
+        if previous_sum / line_sum(line) > 2:
+            min_sum = line_sum(line)
+            min_y = y
+        y += 1
+        previous_sum = line_sum(line)
+    print (min_y, min_sum)
+
 
 
 
