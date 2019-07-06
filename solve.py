@@ -57,24 +57,18 @@ def get_last_white_line(pixel_array):
     return last_line
 
 # idea: find an intersection between four tiles and go from there
-
+def is_edge_pixel(y,x):
+    return False
 
 if __name__ == '__main__':
     # get_current_screenshot()
     ss = read_screenshot()
     pixel_array = pixels_to_tuple_array(ss[0], ss[1], ss[2])
-    last_line = get_last_white_line(pixel_array)
-    min_sum = line_sum(pixel_array[last_line])
-    min_y = last_line
-    y = last_line
-    previous_sum = min_sum
-    for line in pixel_array[last_line:-(last_line + 10)]:
-        if previous_sum / line_sum(line) > 2:
-            min_sum = line_sum(line)
-            min_y = y
-        y += 1
-        previous_sum = line_sum(line)
-    print (min_y, min_sum)
+    height = len(pixel_array)
+    width = len(pixel_array[0])
+    for y in range(0,height):
+        for x in range(0,width):
+            print is_edge_pixel(y, x)
 
 
 
