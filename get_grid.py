@@ -84,8 +84,11 @@ class Playground:
         intersections = self.get_intersections()
         (x, y) = intersections[0]
         min_x = x
-        leftmost_point = ((x - self.get_tile_width() + 3), (y - self.get_tile_height() + 3))
-        return leftmost_point
+        for inside in range(0,5):
+            leftmost_point = ((x - self.get_tile_width() + inside), (y - self.get_tile_height() + inside))
+            if self.is_black(leftmost_point[0], leftmost_point[1]):
+                return leftmost_point
+        raise ValueError('Could not find a leftmost point')
         
         
 
