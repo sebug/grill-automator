@@ -14,14 +14,27 @@ class Playground:
         self.tile_height = False
         self.start_intersection = False
         self.topleft_point = False
+        self.inset = False
 
     def is_black(self, x, y):
         pixel = self.pixel_at(x,y)
         return pixel[0] == 33 and pixel[1] == 32 and pixel[2] == 31
 
+    def is_kinda_black(self, x, y):
+        pixel = self.pixel_at(x, y)
+        min = 28
+        max = 42
+        return pixel[0] >= min and pixel[0] < max and pixel[1] >= min and pixel[1] < max and pixel[2] >= min and pixel[2] <max
+
     def is_gray(self, x, y):
         pixel = self.pixel_at(x, y)
         return pixel[0] == 58 and pixel[1] == 56 and pixel[2] == 54
+
+    def is_kinda_gray(self, x, y):
+        pixel = self.pixel_at(x, y)
+        min = 50
+        max = 65
+        return pixel[0] >= min and pixel[0] < max and pixel[1] >= min and pixel[1] < max and pixel[2] >= min and pixel[2] < max
 
     def is_intersection(self, x, y):
         top_left = (x, y)
@@ -92,9 +105,20 @@ class Playground:
             leftmost_point = ((x - self.get_tile_width() + inside), (y - self.get_tile_height() + inside))
             if self.is_black(leftmost_point[0], leftmost_point[1]):
                 self.topleft_point = leftmost_point
+                self.inset = inside
                 return self.topleft_point
         raise ValueError('Could not find a leftmost point')
-        
+
+    def get_tile_tops(self):
+        topleft = self.get_topleft_point()
+        tile_width = self.get_tile_width()
+        tile_height = self.get_tile_height()
+        res = []
+        for x in range(topleft[0], self.width - self.inset, tile_width + self.inset):
+            for y in range(topleft[1], self.height - self.inset, tile_height + self.inset):
+                if self.is_kinda_black(x, y) or self.is_kinda_gray(x, y):
+                    res.append((x, y))
+        return res
         
 
 def read_screenshot(screenshot_path):
@@ -105,7 +129,6 @@ def read_screenshot(screenshot_path):
 if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
-    topleft = ss.get_topleft_point()
-    topleft = ss.get_topleft_point()
-    topleft = ss.get_topleft_point()
-    print ss.pixel_at(topleft[0], topleft[1])
+    tt = ss.get_tile_tops()
+    print tt
+    print len(tt)
