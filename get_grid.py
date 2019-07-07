@@ -17,6 +17,7 @@ class Playground:
         self.inset = False
         self.tile_tops = False
         self.color_averages = False
+        self.whitecounts = False
 
     def is_black(self, x, y):
         pixel = self.pixel_at(x,y)
@@ -37,6 +38,10 @@ class Playground:
         min = 50
         max = 65
         return pixel[0] >= min and pixel[0] < max and pixel[1] >= min and pixel[1] < max and pixel[2] >= min and pixel[2] < max
+
+    def is_kinda_white(self, x, y):
+        pixel = self.pixel_at(x, y)
+        return pixel[0] >= 250 and pixel[1] >= 250 and pixel[2] >= 250
 
     def is_intersection(self, x, y):
         top_left = (x, y)
@@ -150,6 +155,16 @@ class Playground:
                     sum_green / total_traversed,
                     sum_blue / total_traversed)
 
+    def get_white_pixel_count(self, topx, topy):
+        whitecount = 0
+        tile_width = self.get_tile_width()
+        tile_height = self.get_tile_height()
+        for x in range(topx, topx + tile_width):
+            for y in range(topy, topy + tile_height):
+                if self.is_kinda_white(x, y):
+                    whitecount += 1
+        return whitecount
+
     def get_color_averages(self):
         if self.color_averages:
             return self.color_averages
@@ -160,26 +175,37 @@ class Playground:
         self.color_averages = averages
         return self.color_averages
 
-    def is_fish(self, color_average):
+    def get_whitecounts(self):
+        if self.whitecounts:
+            return self.whitecounts
+        whitecounts = []
+        for top in self.get_tile_tops():
+            wc = self.get_white_pixel_count(top[0], top[1])
+            whitecounts.append((top,wc))
+        self.whitecounts = whitecounts
+        return self.whitecounts
+        
+
+    def is_fish(self, color_average, whitecount):
         return color_average[2] > 140
 
-    def is_steak(self, color_average):
+    def is_steak(self, color_average, whitecount):
         return color_average[0] > 175 and color_average[1] < 80
 
-    def is_sausage(self, color_average):
+    def is_sausage(self, color_average, whitecount):
         return color_average[0] > 165 and color_average[1] >= 80
 
-    def is_corn(self, color_average):
+    def is_corn(self, color_average, whitecount):
         return color_average[0] < 180 and color_average[1] >= 90 and color_average[2] < 100
 
-    def representation(self, color_average):
-        if self.is_fish(color_average):
+    def representation(self, color_average, whitecount):
+        if self.is_fish(color_average, whitecount):
             return 'F'
-        elif self.is_steak(color_average):
+        elif self.is_steak(color_average, whitecount):
             return 'S'
-        elif self.is_sausage(color_average):
+        elif self.is_sausage(color_average, whitecount):
             return 'W'
-        elif self.is_corn(color_average):
+        elif self.is_corn(color_average, whitecount):
             return 'M'
         else:
             print color_average
@@ -187,6 +213,7 @@ class Playground:
 
     def representation_grid(self):
         color_averages = self.get_color_averages()
+        whitecounts = self.get_whitecounts()
         ys = []
         xs = []
         for ca in color_averages:
@@ -204,8 +231,9 @@ class Playground:
                 symbol = ' '
                 t = (x, y)
                 matching = filter(lambda ca: ca[0] == t, color_averages)
+                matchingwc = filter(lambda ca: ca[0] == t, whitecounts)
                 if len(matching) > 0:
-                    symbol = self.representation(matching[0][1])
+                    symbol = self.representation(matching[0][1], matchingwc[0][1])
                 line.append(symbol)
             grid.append(line)
         
