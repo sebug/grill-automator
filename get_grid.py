@@ -121,10 +121,11 @@ class Playground:
         (x, y) = intersections[0]
         min_x = x
         for inside in range(0,5):
-            leftmost_point = ((x - self.get_tile_width() + inside), (y - self.get_tile_height() + inside + 1))
+            leftmost_point = ((x - self.get_tile_width() + inside), (y - self.get_tile_height() + inside))
             if self.is_black(leftmost_point[0], leftmost_point[1]):
                 self.topleft_point = leftmost_point
                 self.inset = inside
+
         return self.topleft_point
 
     def get_tile_tops(self):
