@@ -182,6 +182,7 @@ class Playground:
         elif self.is_corn(color_average):
             return 'M'
         else:
+            print color_average
             raise ValueError('Unhandled color')
 
     def representation_grid(self):
