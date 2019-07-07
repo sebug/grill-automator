@@ -59,9 +59,12 @@ class Playground:
         
 
     def pixel_at(self, x, y):
-        pixel_byte_width = 4 if self.metadata['alpha'] else 3
-        pixel_position = x + y * self.width
-        return self.pixels[pixel_position * pixel_byte_width : (pixel_position + 1) * pixel_byte_width]
+        return self.pixel_at_for_image(x, y, self.width, self.metadata, self.pixels)
+
+    def pixel_at_for_image(self, x, y, width, metadata, pixels):
+        pixel_byte_width = 4 if metadata['alpha'] else 3
+        pixel_position = x + y * width
+        return pixels[pixel_position * pixel_byte_width : (pixel_position + 1) * pixel_byte_width]
 
     def get_intersections(self):
         if (self.intersections):
@@ -178,7 +181,7 @@ class Playground:
     def difference_to(self, tileName, topx, topy):
         (tile_width, tile_height, pixels, metadata) = self.tile_dict[tileName]
         min_width = min(self.tile_width, tile_width)
-        min_height = min(self.title_height, tile_height)
+        min_height = min(self.tile_height, tile_height)
         print self.tile_width
         print tile_width
 
