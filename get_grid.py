@@ -31,7 +31,10 @@ class Playground:
         return pixel[0] == 33 and pixel[1] == 32 and pixel[2] == 31
 
     def is_kinda_black(self, x, y):
-        pixel = self.pixel_at(x, y)
+        return self.is_kinda_black_for_image(x, y, self.width, self.metadata, self.pixels)
+
+    def is_kinda_black_for_image(self, x, y, width, metadata, pixels):
+        pixel = self.pixel_at_for_image(x, y, width, metadata, pixels)
         min = 28
         max = 42
         return pixel[0] >= min and pixel[0] < max and pixel[1] >= min and pixel[1] < max and pixel[2] >= min and pixel[2] <max
@@ -41,7 +44,10 @@ class Playground:
         return pixel[0] == 58 and pixel[1] == 56 and pixel[2] == 54
 
     def is_kinda_gray(self, x, y):
-        pixel = self.pixel_at(x, y)
+        return self.is_kinda_gray_for_image(x, y, self.width, self.metadata, self.pixels)
+
+    def is_kinda_gray_for_image(self, x, y, width, metadata, pixels):
+        pixel = self.pixel_at_for_image(x, y, width, metadata, pixels)
         min = 50
         max = 65
         return pixel[0] >= min and pixel[0] < max and pixel[1] >= min and pixel[1] < max and pixel[2] >= min and pixel[2] < max
