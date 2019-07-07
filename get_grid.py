@@ -1,10 +1,17 @@
 import os
 import png, array
 import sys
+import glob
 
 class Playground:
     def __init__(self, screenshot_path):
-        (w, h, pixels, metadata) = read_screenshot(screenshot_path)
+        (w, h, pixels, metadata) = read_image(screenshot_path)
+        tile_paths = glob.glob('tiles/*.png')
+        tiles_and_path = map(lambda p: (p.replace('tiles/','').replace('.png',''), p), tile_paths)
+        self.tile_dict = {}
+        for t in tiles_and_path:
+            self.tile_dict[t[0]] = read_image(t[1])
+
         self.width = w
         self.height = h
         self.pixels = pixels
@@ -165,6 +172,16 @@ class Playground:
                     whitecount += 1
         return whitecount
 
+    def pixel_diff(self, pixel1, pixel2):
+        return abs(pixel1[0] - pixel2[0]) + abs(pixel1[1] - pixel2[1]) + abs(pixel1[2] - pixel2[2])
+
+    def difference_to(self, tileName, topx, topy):
+        (tile_width, tile_height, pixels, metadata) = self.tile_dict[tileName]
+        min_width = min(self.tile_width, tile_width)
+        min_height = min(self.title_height, tile_height)
+        print self.tile_width
+        print tile_width
+
     def get_color_averages(self):
         if self.color_averages:
             return self.color_averages
@@ -233,6 +250,7 @@ class Playground:
                 matching = filter(lambda ca: ca[0] == t, color_averages)
                 matchingwc = filter(lambda ca: ca[0] == t, whitecounts)
                 if len(matching) > 0:
+                    self.difference_to('fish', matching[0][0], matching[0][1])
                     symbol = self.representation(matching[0][1], matchingwc[0][1])
                 line.append(symbol)
             grid.append(line)
@@ -240,7 +258,7 @@ class Playground:
         return grid
         
 
-def read_screenshot(screenshot_path):
+def read_image(screenshot_path):
     reader = png.Reader(filename = screenshot_path)
     w, h, pixels, metadata = reader.read_flat()
     return (w, h, pixels, metadata)
