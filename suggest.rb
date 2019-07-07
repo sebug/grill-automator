@@ -415,6 +415,12 @@ end
 # b = Board.new("..swm..\n.sfkpf.\nmkk0kmk\npfmfwms\np1pmkff\nspfpspw\nfwfsmkw\n.spfws.\n..mkp..")
 b = Board.new("..fks..\nwkmpfkp\n4fsmk44\nwmkkmfk\n4pp4pkm\nmwpwmwm\nwskm4pp\n..mff..") # Level 10?
 
+if ARGV.length > 0
+  content = STDIN.read
+  content = content.chomp
+  b = Board.new(content)
+end
+
 total = 0
 1.times{
 	pts, move = b.bestMove(1)
