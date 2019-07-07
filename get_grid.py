@@ -16,6 +16,7 @@ class Playground:
         self.topleft_point = False
         self.inset = False
         self.tile_tops = False
+        self.color_averages = False
 
     def is_black(self, x, y):
         pixel = self.pixel_at(x,y)
@@ -150,11 +151,14 @@ class Playground:
                     sum_blue / total_traversed)
 
     def get_color_averages(self):
+        if self.color_averages:
+            return self.color_averages
         averages = []
         for top in self.get_tile_tops():
             avg = self.color_average(top[0], top[1])
             averages.append((top,avg))
-        return averages
+        self.color_averages = averages
+        return self.color_averages
         
 
 def read_screenshot(screenshot_path):
@@ -167,3 +171,5 @@ if __name__ == '__main__':
     ss = Playground(screenshot_name)
     tt = ss.get_tile_tops()
     print ss.get_color_averages()
+    print ss.get_color_averages()
+
