@@ -9,6 +9,7 @@ class Playground:
         self.height = h
         self.pixels = pixels
         self.metadata = metadata
+        self.intersections = False
 
     def is_black(self, x, y):
         pixel = self.pixel_at(x,y)
@@ -31,6 +32,17 @@ class Playground:
         pixel_position = x + y * self.width
         return self.pixels[pixel_position * pixel_byte_width : (pixel_position + 1) * pixel_byte_width]
 
+    def get_intersections(self):
+        if (self.intersections):
+            return self.intersections
+        intersections = []
+        for x in range(0, self.width):
+            for y in range(0, self.height):
+                if self.is_intersection(x, y):
+                    intersections.append((x, y))
+        self.intersections = intersections
+        return self.intersections
+
 def read_screenshot(screenshot_path):
     reader = png.Reader(filename = screenshot_path)
     w, h, pixels, metadata = reader.read_flat()
@@ -39,4 +51,6 @@ def read_screenshot(screenshot_path):
 if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
-    print ss.is_intersection(271, 802)
+    print ss.get_intersections()
+    print ss.get_intersections()
+    print ss.get_intersections()
