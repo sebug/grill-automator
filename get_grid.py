@@ -210,32 +210,6 @@ class Playground:
         self.whitecounts = whitecounts
         return self.whitecounts
         
-
-    def is_fish(self, color_average, whitecount):
-        return color_average[2] > 140
-
-    def is_steak(self, color_average, whitecount):
-        return color_average[0] > 175 and color_average[1] < 90 and whitecount > 90
-
-    def is_sausage(self, color_average, whitecount):
-        return color_average[0] > 165 and color_average[1] >= 80
-
-    def is_corn(self, color_average, whitecount):
-        return color_average[0] < 180 and color_average[1] >= 90 and color_average[2] < 100
-
-    def representation(self, color_average, whitecount):
-        if self.is_fish(color_average, whitecount):
-            return 'F'
-        elif self.is_steak(color_average, whitecount):
-            return 'S'
-        elif self.is_sausage(color_average, whitecount):
-            return 'W'
-        elif self.is_corn(color_average, whitecount):
-            return 'M'
-        else:
-            print color_average
-            raise ValueError('Unhandled color')
-
     def representation_grid(self):
         ys = []
         xs = []
