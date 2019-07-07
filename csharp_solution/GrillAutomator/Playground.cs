@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
 namespace GrillAutomator
 {
     public class Playground
@@ -12,9 +16,15 @@ namespace GrillAutomator
             this.TilesPath = tilesPath ?? throw new ArgumentNullException(nameof(tilesPath));
         }
 
+        private IEnumerable<Tile> GetTiles()
+        {
+            var files = Directory.EnumerateFiles(this.TilesPath, "*.png");
+            return files.Select(p => new Tile(p));
+        }
+
         public void Detect()
         {
-
+            var tiles = this.GetTiles().ToList();
         }
     }
 }
