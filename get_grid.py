@@ -18,6 +18,14 @@ class Playground:
         pixel = self.pixel_at(x, y)
         return pixel[0] == 58 and pixel[1] == 56 and pixel[2] == 54
 
+    def is_intersection(self, x, y):
+        top_left = (x, y)
+        top_right = (x + 5, y)
+        bottom_left = (x, y + 5)
+        bottom_right = (x + 5, y + 5)
+        return self.is_black(x, y) and self.is_gray(x + 5, y) and self.is_gray(x, y + 5) and self.is_black(x + 5, y + 5)
+        
+
     def pixel_at(self, x, y):
         pixel_byte_width = 4 if self.metadata['alpha'] else 3
         pixel_position = x + y * self.width
@@ -31,4 +39,4 @@ def read_screenshot(screenshot_path):
 if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
-    print ss.is_gray(312, 703)
+    print ss.is_intersection(271, 802)
