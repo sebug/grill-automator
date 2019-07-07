@@ -13,6 +13,7 @@ class Playground:
         self.tile_width = False
         self.tile_height = False
         self.start_intersection = False
+        self.topleft_point = False
 
     def is_black(self, x, y):
         pixel = self.pixel_at(x,y)
@@ -81,13 +82,17 @@ class Playground:
         raise ValueError('Expected to have found more than one item in intersections that differ')
 
     def get_topleft_point(self):
+        if self.topleft_point:
+            return self.topleft_point
+
         intersections = self.get_intersections()
         (x, y) = intersections[0]
         min_x = x
         for inside in range(0,5):
             leftmost_point = ((x - self.get_tile_width() + inside), (y - self.get_tile_height() + inside))
             if self.is_black(leftmost_point[0], leftmost_point[1]):
-                return leftmost_point
+                self.topleft_point = leftmost_point
+                return self.topleft_point
         raise ValueError('Could not find a leftmost point')
         
         
@@ -100,5 +105,7 @@ def read_screenshot(screenshot_path):
 if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
+    topleft = ss.get_topleft_point()
+    topleft = ss.get_topleft_point()
     topleft = ss.get_topleft_point()
     print ss.pixel_at(topleft[0], topleft[1])
