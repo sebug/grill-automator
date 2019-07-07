@@ -14,3 +14,8 @@ Swipe to exchange blocks.
 To solve:
 
 	python get_grid.py sample_screenshots/6.png | ruby suggest.rb i
+
+
+## TO DO:
+ * Resize screenshots for smaller phones
+ * Correctly deal with non-rectangular boards
