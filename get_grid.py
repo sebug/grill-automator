@@ -15,6 +15,7 @@ class Playground:
         self.start_intersection = False
         self.topleft_point = False
         self.inset = False
+        self.tile_tops = False
 
     def is_black(self, x, y):
         pixel = self.pixel_at(x,y)
@@ -110,6 +111,9 @@ class Playground:
         raise ValueError('Could not find a leftmost point')
 
     def get_tile_tops(self):
+        if self.tile_tops:
+            return self.tile_tops
+        
         topleft = self.get_topleft_point()
         tile_width = self.get_tile_width()
         tile_height = self.get_tile_height()
@@ -118,7 +122,9 @@ class Playground:
             for y in range(topleft[1], self.height - self.inset, tile_height + self.inset):
                 if self.is_kinda_black(x, y) or self.is_kinda_gray(x, y):
                     res.append((x, y))
-        return res
+
+        self.tile_tops = res
+        return self.tile_tops
         
 
 def read_screenshot(screenshot_path):
@@ -129,6 +135,7 @@ def read_screenshot(screenshot_path):
 if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
+    tt = ss.get_tile_tops()
     tt = ss.get_tile_tops()
     print tt
     print len(tt)
