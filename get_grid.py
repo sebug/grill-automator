@@ -190,7 +190,7 @@ class Playground:
         return color_average[2] > 140
 
     def is_steak(self, color_average, whitecount):
-        return color_average[0] > 175 and color_average[1] < 80
+        return color_average[0] > 175 and color_average[1] < 90 and whitecount > 90
 
     def is_sausage(self, color_average, whitecount):
         return color_average[0] > 165 and color_average[1] >= 80
