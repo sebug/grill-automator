@@ -51,10 +51,6 @@ class Playground:
         return pixel[0] >= 250 and pixel[1] >= 250 and pixel[2] >= 250
 
     def is_intersection(self, x, y):
-        top_left = (x, y)
-        top_right = (x + 5, y)
-        bottom_left = (x, y + 5)
-        bottom_right = (x + 5, y + 5)
         return self.is_black(x, y) and self.is_gray(x + 5, y) and self.is_gray(x, y + 5) and self.is_black(x + 5, y + 5)
         
 
@@ -77,39 +73,38 @@ class Playground:
         self.intersections = intersections
         return self.intersections
 
+    # Calculate tile width by counting the longest gray line found
     def get_tile_width(self):
-        if self.tile_width:
+        if (self.tile_width):
             return self.tile_width
-        
-        intersections = self.get_intersections()
-        for i in range(0, len(intersections) - 1):
-            (x1, y1) = intersections[i]
-            (x2, y2) = intersections[i + 1]
-            if (x1 != x2 and x1 + 1 != x2):
-                self.tile_width = abs(x1 - x2)
-                return self.tile_width
-        raise ValueError('Expected to have found more than one item in intersections that differ')
+        max_tile_width = 0
+        for y in range(0, self.height):
+            current_tile_width = 0
+            for x in range(0, self.width):
+                if self.is_gray(x, y):
+                    current_tile_width += 1
+                else:
+                    if current_tile_width > max_tile_width:
+                        max_tile_width = current_tile_width
+                    current_tile_width = 0
+        self.tile_width = max_tile_width
+        return self.tile_width
 
     def get_tile_height(self):
-        if self.tile_height:
+        if (self.tile_height):
             return self.tile_height
-        
-        intersections = self.get_intersections()
-        current_y = -1
-        ys = []
-        for i in range(0, len(intersections)):
-            (x, y) = intersections[i]
-            if current_y != y:
-                current_y = y
-                ys.append(current_y)
-        for i in range(0, len(ys) - 1):
-            current_y = ys[i]
-            next_y = ys[i + 1]
-            if current_y + 1 != next_y:
-                self.tile_height = abs(current_y - next_y) / 2 # this is because the vertical pattern only repeats every two lines
-                return self.tile_height
-            
-        raise ValueError('Expected to have found more than one item in intersections that differ')
+        max_tile_height = 0
+        for x in range(0, self.width):
+            current_tile_height = 0
+            for y in range(0, self.height):
+                if self.is_gray(x, y):
+                    current_tile_height += 1
+                else:
+                    if current_tile_height > max_tile_height:
+                        max_tile_height = current_tile_height
+                    current_tile_height = 0
+        self.tile_height = max_tile_height
+        return self.tile_height
 
     def get_topleft_point(self):
         if self.topleft_point:
@@ -119,7 +114,7 @@ class Playground:
         (x, y) = intersections[0]
         min_x = x
         for inside in range(0,5):
-            leftmost_point = ((x - self.get_tile_width() + inside), (y - self.get_tile_height() + inside))
+            leftmost_point = ((x - self.get_tile_width() + inside), (y - self.get_tile_height() + inside + 1))
             if self.is_black(leftmost_point[0], leftmost_point[1]):
                 self.topleft_point = leftmost_point
                 self.inset = inside
@@ -252,7 +247,6 @@ if __name__ == '__main__':
     grid = ss.representation_grid()
     for line in grid:
         print ''.join(line)
-
 
 
 
