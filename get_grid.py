@@ -237,13 +237,12 @@ class Playground:
             raise ValueError('Unhandled color')
 
     def representation_grid(self):
-        color_averages = self.get_color_averages()
-        whitecounts = self.get_whitecounts()
         ys = []
         xs = []
-        for ca in color_averages:
-            y = ca[0][1]
-            x = ca[0][0]
+        tile_tops = self.get_tile_tops()
+        for ca in tile_tops:
+            y = ca[1]
+            x = ca[0]
             if not (x in xs):
                 xs.append(x)
             if not (y in ys):
@@ -255,17 +254,14 @@ class Playground:
             for x in xs:
                 symbol = ' '
                 t = (x, y)
-                matching = filter(lambda ca: ca[0] == t, color_averages)
-                matchingwc = filter(lambda ca: ca[0] == t, whitecounts)
+                matching = filter(lambda ca: ca == t, tile_tops)
                 if len(matching) > 0:
-                    tile_names = ['fish', 'sausage', 'steak', 'corn']
-                    differences = map(lambda tile: self.difference_to(tile, x, y), tile_names)
+                    tile_tuples = [('fish', 'F'), ('sausage', 'W'), ('steak', 'S'), ('corn', 'M'), ('empty', ' ')]
+                    differences = map(lambda tile: self.difference_to(tile[0], x, y), tile_tuples)
                     min_diff = min(differences)
                     tile_index = differences.index(min_diff)
-                    tile_name = tile_names[tile_index]
-                    symbol = self.representation(matching[0][1], matchingwc[0][1])
-                    print (symbol, tile_name)
-                line.append(symbol)
+                    tile_symbol = tile_tuples[tile_index][1]
+                line.append(tile_symbol)
             grid.append(line)
         
         return grid
