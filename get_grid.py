@@ -185,9 +185,23 @@ class Playground:
         total_difference = 0
         for x in range(0, min_width):
             for y in range(0, min_height):
-                px1 = self.pixel_at_for_image(x + topx, y + topy, self.width, self.metadata, self.pixels)
-                px2 = self.pixel_at_for_image(x, y, tile_width, metadata, pixels)
-                total_difference += self.pixel_diff(px1, px2)
+                # Skip the pixel if it's kinda gray or black
+                orig_kinda_black = self.is_kinda_black_for_image(x + topx, y + topy, self.width, self.metadata, self.pixels)
+                orig_kinda_gray = self.is_kinda_gray_for_image(x + topx, y + topy, self.width, self.metadata, self.pixels)
+                tile_kinda_black = self.is_kinda_black_for_image(x, y, tile_width, metadata, pixels)
+                tile_kinda_gray = self.is_kinda_gray_for_image(x, y, tile_width, metadata, pixels)
+                
+                if not orig_kinda_gray:
+                    px1 = self.pixel_at_for_image(x + topx, y + topy, self.width, self.metadata, self.pixels)
+                    px2 = self.pixel_at_for_image(x, y, tile_width, metadata, pixels)
+                    total_difference += self.pixel_diff(px1, px2)
+                else:
+                    # make the difference to black instead
+                    px1 = [33, 32, 31]
+
+                    px2 = self.pixel_at_for_image(x, y, tile_width, metadata, pixels)
+                    total_difference += self.pixel_diff(px1, px2)
+                    
         return total_difference
 
     def get_color_averages(self):
