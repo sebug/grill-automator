@@ -167,7 +167,22 @@ class Playground:
         return color_average[0] > 175 and color_average[1] < 80
 
     def is_sausage(self, color_average):
-        return color_average[0] > 170 and color_average[1] >= 80
+        return color_average[0] > 165 and color_average[1] >= 80
+
+    def is_corn(self, color_average):
+        return color_average[0] < 180 and color_average[1] >= 90 and color_average[2] < 100
+
+    def representation(self, color_average):
+        if self.is_fish(color_average):
+            return 'F'
+        elif self.is_steak(color_average):
+            return 'S'
+        elif self.is_sausage(color_average):
+            return 'W'
+        elif self.is_corn(color_average):
+            return 'M'
+        else:
+            raise ValueError('Unhandled color')
         
 
 def read_screenshot(screenshot_path):
@@ -181,9 +196,8 @@ if __name__ == '__main__':
     tt = ss.get_tile_tops()
     color_averages = ss.get_color_averages()
     for ca in color_averages:
-        if ss.is_fish(ca[1]) or ss.is_steak(ca[1]) or ss.is_sausage(ca[1]):
-            print (ca[0], ss.is_fish(ca[1]), ss.is_steak(ca[1]), ss.is_sausage(ca[1]))
-        else:
-            print ca
+        print (ca[0], ss.representation(ca[1]))
+
+
 
 
