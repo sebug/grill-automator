@@ -183,6 +183,26 @@ class Playground:
             return 'M'
         else:
             raise ValueError('Unhandled color')
+
+    def representation_grid(self):
+        color_averages = self.get_color_averages()
+        ys = []
+        xs = []
+        for ca in color_averages:
+            y = ca[0][1]
+            x = ca[0][0]
+            if not (x in xs):
+                xs.append(x)
+            if not (y in ys):
+                ys.append(y)
+        # now make the grid
+        grid = []
+        for y in range(0, len(ys)):
+            line = []
+            for x in range(0, len(xs)):
+                line.append(' ')
+            grid.append(line)
+        print grid
         
 
 def read_screenshot(screenshot_path):
@@ -193,10 +213,8 @@ def read_screenshot(screenshot_path):
 if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
-    tt = ss.get_tile_tops()
-    color_averages = ss.get_color_averages()
-    for ca in color_averages:
-        print (ca[0], ss.representation(ca[1]))
+    ss.representation_grid()
+
 
 
 
