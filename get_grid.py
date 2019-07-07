@@ -148,6 +148,13 @@ class Playground:
             return (sum_red / total_traversed,
                     sum_green / total_traversed,
                     sum_blue / total_traversed)
+
+    def get_color_averages(self):
+        averages = []
+        for top in self.get_tile_tops():
+            avg = self.color_average(top[0], top[1])
+            averages.append((top,avg))
+        return averages
         
 
 def read_screenshot(screenshot_path):
@@ -159,6 +166,4 @@ if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
     tt = ss.get_tile_tops()
-    print tt
-    print len(tt)
-    print ss.color_average(tt[0][0], tt[0][1])
+    print ss.get_color_averages()
