@@ -197,12 +197,18 @@ class Playground:
                 ys.append(y)
         # now make the grid
         grid = []
-        for y in range(0, len(ys)):
+        for y in ys:
             line = []
-            for x in range(0, len(xs)):
-                line.append(' ')
+            for x in xs:
+                symbol = ' '
+                t = (x, y)
+                matching = filter(lambda ca: ca[0] == t, color_averages)
+                if len(matching) > 0:
+                    symbol = self.representation(matching[0][1])
+                line.append(symbol)
             grid.append(line)
-        print grid
+        
+        return grid
         
 
 def read_screenshot(screenshot_path):
@@ -213,7 +219,10 @@ def read_screenshot(screenshot_path):
 if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
-    ss.representation_grid()
+    grid = ss.representation_grid()
+    for line in grid:
+        print ''.join(line)
+
 
 
 
