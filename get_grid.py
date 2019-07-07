@@ -256,7 +256,7 @@ class Playground:
                 t = (x, y)
                 matching = filter(lambda ca: ca == t, tile_tops)
                 if len(matching) > 0:
-                    tile_tuples = [('fish', 'F'), ('sausage', 'W'), ('steak', 'S'), ('corn', 'M'), ('empty', ' ')]
+                    tile_tuples = [('fish', 'F'), ('sausage', 'W'), ('steak', 'S'), ('corn', 'M'), ('cheese', 'K'), ('empty', ' ')]
                     differences = map(lambda tile: self.difference_to(tile[0], x, y), tile_tuples)
                     min_diff = min(differences)
                     tile_index = differences.index(min_diff)
