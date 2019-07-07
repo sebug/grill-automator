@@ -125,6 +125,29 @@ class Playground:
 
         self.tile_tops = res
         return self.tile_tops
+
+    def color_average(self, topx, topy):
+        sum_red = 0
+        sum_green = 0
+        sum_blue = 0
+        tile_width = self.get_tile_width()
+        tile_height = self.get_tile_height()
+        total_traversed = 0
+        for x in range(topx, topx + tile_width):
+            for y in range(topy, topy + tile_height):
+                if not self.is_kinda_black(x, y) and not self.is_kinda_gray(x, y):
+                    total_traversed += 1
+                    pixel = self.pixel_at(x, y)
+                    sum_red += pixel[0]
+                    sum_green += pixel[1]
+                    sum_blue += pixel[2]
+
+        if total_traversed == 0:
+            return self.pixel_at(topx, topy)
+        else:
+            return (sum_red / total_traversed,
+                    sum_green / total_traversed,
+                    sum_blue / total_traversed)
         
 
 def read_screenshot(screenshot_path):
@@ -136,6 +159,6 @@ if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
     tt = ss.get_tile_tops()
-    tt = ss.get_tile_tops()
     print tt
     print len(tt)
+    print ss.color_average(tt[0][0], tt[0][1])
