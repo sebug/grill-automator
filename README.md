@@ -19,3 +19,6 @@ To solve:
 ## TO DO:
  * Resize screenshots for smaller phones
  * Correctly deal with non-rectangular boards
+ * make it faster
+ 
+	 python -m cProfile get_grid.py sample_screenshots/1.png
