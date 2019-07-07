@@ -2,10 +2,8 @@ import os
 import png, array
 import sys
 
-adb_path = '~/Library/Android/sdk/platform-tools/adb'
-
 def adb_do(cmd):
-    os.system(adb_path + ' ' + cmd)
+    os.system('adb ' + cmd)
 
 def get_current_screenshot():
     adb_do('shell screencap -p /sdcard/screen.png')
@@ -19,7 +17,7 @@ def read_screenshot(screenshot_path):
 
 if __name__ == '__main__':
     get_current_screenshot()
-    print 'Got screenshot'
+
 
 
 
