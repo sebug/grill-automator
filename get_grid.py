@@ -182,8 +182,13 @@ class Playground:
         (tile_width, tile_height, pixels, metadata) = self.tile_dict[tileName]
         min_width = min(self.tile_width, tile_width)
         min_height = min(self.tile_height, tile_height)
-        print self.tile_width
-        print tile_width
+        total_difference = 0
+        for x in range(0, min_width):
+            for y in range(0, min_height):
+                px1 = self.pixel_at_for_image(x + topx, y + topy, self.width, self.metadata, self.pixels)
+                px2 = self.pixel_at_for_image(x, y, tile_width, metadata, pixels)
+                total_difference += self.pixel_diff(px1, px2)
+        return total_difference
 
     def get_color_averages(self):
         if self.color_averages:
@@ -253,8 +258,13 @@ class Playground:
                 matching = filter(lambda ca: ca[0] == t, color_averages)
                 matchingwc = filter(lambda ca: ca[0] == t, whitecounts)
                 if len(matching) > 0:
-                    self.difference_to('fish', matching[0][0], matching[0][1])
+                    tile_names = ['fish', 'sausage', 'steak', 'corn']
+                    differences = map(lambda tile: self.difference_to(tile, x, y), tile_names)
+                    min_diff = min(differences)
+                    tile_index = differences.index(min_diff)
+                    tile_name = tile_names[tile_index]
                     symbol = self.representation(matching[0][1], matchingwc[0][1])
+                    print (symbol, tile_name)
                 line.append(symbol)
             grid.append(line)
         
