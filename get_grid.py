@@ -10,6 +10,10 @@ class Playground:
         self.pixels = pixels
         self.metadata = metadata
 
+    def is_black(self, x, y):
+        pixel = self.pixel_at(x,y)
+        return pixel[0] == 33 and pixel[1] == 32 and pixel[2] == 31
+
     def pixel_at(self, x, y):
         pixel_byte_width = 4 if self.metadata['alpha'] else 3
         pixel_position = x + y * self.width
@@ -23,4 +27,4 @@ def read_screenshot(screenshot_path):
 if __name__ == '__main__':
     screenshot_name = sys.argv[1]
     ss = Playground(screenshot_name)
-    print ss.pixel_at(149, 134)
+    print ss.is_black(155, 685)
