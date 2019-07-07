@@ -118,8 +118,7 @@ class Playground:
             if self.is_black(leftmost_point[0], leftmost_point[1]):
                 self.topleft_point = leftmost_point
                 self.inset = inside
-                return self.topleft_point
-        raise ValueError('Could not find a leftmost point')
+        return self.topleft_point
 
     def get_tile_tops(self):
         if self.tile_tops:
