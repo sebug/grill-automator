@@ -13,6 +13,7 @@ def get_current_screenshot():
 
 def read_screenshot(screenshot_path):
     reader = png.Reader(filename = screenshot_path)
+    # todo - resize according to tile size
     w, h, pixels, metadata = reader.read_flat()
     return (w,h,pixels,metadata)
 
