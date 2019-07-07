@@ -246,7 +246,7 @@ class Playground:
                 t = (x, y)
                 matching = filter(lambda ca: ca == t, tile_tops)
                 if len(matching) > 0:
-                    tile_tuples = [('fish', 'F'), ('sausage', 'W'), ('steak', 'S'), ('corn', 'M'), ('cheese', 'K'), ('potato', '0'), ('burger', '2'), ('paprika', 'P'), ('skewer', '1'), ('empty', ' ')]
+                    tile_tuples = [('fish', 'f'), ('sausage', 'w'), ('steak', 's'), ('corn', 'm'), ('cheese', 'k'), ('potato', '0'), ('burger', '2'), ('paprika', 'p'), ('skewer', '1'), ('empty', '.')]
                     differences = map(lambda tile: self.difference_to(tile[0], x, y), tile_tuples)
                     min_diff = min(differences)
                     tile_index = differences.index(min_diff)
@@ -268,8 +268,3 @@ if __name__ == '__main__':
     grid = ss.representation_grid()
     for line in grid:
         print ''.join(line)
-
-
-
-
-
