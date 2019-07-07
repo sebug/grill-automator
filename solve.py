@@ -18,7 +18,7 @@ def read_screenshot(screenshot_path):
 
 def pixels_to_tuple_array(w, h, pixels):
     tuple_array = []
-    pixel_byte_width = 3
+    pixel_byte_width = 4
     for y in range(0, h):
         line_array = []
         for x in range(0, w):
@@ -71,6 +71,9 @@ if __name__ == '__main__':
     pixel_array = pixels_to_tuple_array(ss[0], ss[1], ss[2])
     height = len(pixel_array)
     width = len(pixel_array[0])
+    print (width, height)
+    pixel = pixel_array[690][300]
+    print pixel
     for y in range(1,height - 1):
         for x in range(1,width - 1):
             is_edge_pixel(y, x, pixel_array)
