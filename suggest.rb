@@ -184,6 +184,7 @@ class Board
 	end
 
 	def execMove(m,debug=false)
+		boosterCrush = false
 		if m!=nil
 			x,y = *m[0]
 			dir = m[1]
@@ -201,23 +202,26 @@ class Board
 				if z=="0" # Kartoffel
 					[[-1,0],[0,0],[1,0],[0,1],[0,-1]].each{|d|
 						bb = @board[b+d[1]][a+d[0]]
-						if bb!="." && bb!="3" # Chili/Poulet gehen nicht weg
+						if bb!="." && bb !~ /[34]/ # Chili/Poulet und Sauce gehen nicht weg
 							mark[b+d[1]][a+d[0]] = true
+							boosterCrush = true
 						end
 					}	
 				elsif z=="1" # Spiess
 					if dir[0]==0 # Vertikal
 						for yy in 1...(@h-1)
 							bb = @board[yy][x]
-							if bb!="." && bb!="3"
+							if bb!="." && bb !~ /[34]/ # Chili/Poulet und Sauce gehen nicht weg
 								mark[yy][x] = true
+								boosterCrush = true
 							end
 						end
 					else # Horizontal
 						for xx in 1...(@w-1)
 							bb = @board[y][xx]
-							if bb!="." && bb!="3"
+							if bb!="." && bb !~ /[34]/ # Chili/Poulet und Sauce gehen nicht weg
 								mark[y][xx] = true
+								boosterCrush = true
 							end
 						end
 					end
@@ -228,6 +232,7 @@ class Board
 						for xx in 1...(@w-2)
 							if @board[yy][xx].downcase==other
 								mark[yy][xx] = true
+								boosterCrush = true
 							end
 						end
 					end
@@ -260,11 +265,14 @@ class Board
 			puts "-------------------"
 	  end
 		# remove sauce
-		for yy in 1...(@h-1)
-			for xx in 1...(@w-1)
-				if @board[yy][xx]=="3" && !mark[yy][xx] &&
-						[[1,0],[0,1],[0,-1],[-1,0]].any?{|d| mark[yy+d[1]][xx+d[0]]}
-					@board[yy][xx] = ('a'.ord+rand(6)).chr
+	    unless boosterCrush
+			for yy in 1...(@h-1)
+				for xx in 1...(@w-1)
+					if @board[yy][xx]=="4" && !mark[yy][xx] &&
+							[[1,0],[0,1],[0,-1],[-1,0]].any?{|d| mark[yy+d[1]][xx+d[0]]}
+						@board[yy][xx] = ('a'.ord+rand(6)).chr
+						points+=1000  # Removing Sauce is good!
+					end
 				end
 			end
 		end
@@ -272,6 +280,9 @@ class Board
 		for yy in 1...(@h-1)
 			for xx in 1...(@w-1)
 				if mark[yy][xx]
+					if @board[yy][xx]=~/[A-H]/
+						points+=1000  # Removing alu is good
+					end
 					@board[yy][xx] = " "
 					points += 100
 				end
@@ -286,7 +297,24 @@ class Board
 			puts self.to_s()
 			puts "-"*20
 		end
+		
+		# Remove piment/poulet
+		for xx in 1..(@w-1)
+			yy = @h-2
+			while yy>0 && @board[yy][xx]=~/[ .]/
+				yy-=1
+			end
+			while yy>0 && @board[yy][xx]=='3'  # Piment/poulet
+				@board[yy][xx] = ' '
+				points+=2000  # Removing piment/poulet
+				removed = true
+				yy-=1
+			end
+		end
+
+		
 		# compact field and refill
+		alu = Array.new(@h){|yy| Array.new(@w){|xx| @board[yy][xx]=~/[A-H]/}}
 		for xx in 1..(@w-1)
 			full = @h-2
 			(@h-2).downto(1){|yy|
@@ -297,8 +325,11 @@ class Board
 					if (full<1)
 						@board[yy][xx] = ('a'.ord+rand(6)).chr
 					else
-						@board[yy][xx] = @board[full][xx]
+						@board[yy][xx] = @board[full][xx].downcase
 						@board[full][xx] = " "
+					end
+					if alu[yy][xx]
+						@boad[yy][xx].upcase!
 					end
 				else
 					full-=1
@@ -308,8 +339,9 @@ class Board
 		if debug
 			puts "FILLED "
 			puts to_s
-			puts "============"
 		end
+		
+		
 		if (points>0)
 			points += execMove(nil, debug)
 		end
@@ -413,7 +445,7 @@ if false
 end
 
 # b = Board.new("..swm..\n.sfkpf.\nmkk0kmk\npfmfwms\np1pmkff\nspfpspw\nfwfsmkw\n.spfws.\n..mkp..")
-b = Board.new("..fks..\nwkmpfkp\n4fsmk44\nwmkkmfk\n4pp4pkm\nmwpwmwm\nwskm4pp\n..mff..") # Level 10?
+b = Board.new("..fks..\nwkmpfkp\n4fsmk44\nwmkkmfk\n4pp4pkm\nmwpwmwm\nwskm4pp\n..mff..") # Level 107?
 
 if ARGV.length > 0
   content = STDIN.read
@@ -423,7 +455,7 @@ end
 
 total = 0
 1.times{
-	pts, move = b.bestMove(1)
+	pts, move = b.bestMove(0)
 
 	break if move==nil
 
